@@ -1,2 +1,3 @@
 .vscode/
 playing_card_platform.egg-info
+__pycache__/
