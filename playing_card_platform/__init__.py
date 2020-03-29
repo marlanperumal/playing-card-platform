@@ -4,12 +4,11 @@ from flask import Flask
 from flask_cors import CORS
 
 from .models import db, migrate
-from config import Config
 
 
-def create_app():
+def create_app(config):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config)
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app)

@@ -148,6 +148,18 @@ alembic = ">=0.7"
 
 [[package]]
 category = "main"
+description = "Socket.IO integration for Flask applications"
+name = "flask-socketio"
+optional = false
+python-versions = "*"
+version = "4.2.1"
+
+[package.dependencies]
+Flask = ">=0.9"
+python-socketio = ">=4.3.0"
+
+[[package]]
+category = "main"
 description = "Adds SQLAlchemy support to your Flask application."
 name = "flask-sqlalchemy"
 optional = false
@@ -379,6 +391,37 @@ python-versions = "*"
 version = "1.0.4"
 
 [[package]]
+category = "main"
+description = "Engine.IO server"
+name = "python-engineio"
+optional = false
+python-versions = "*"
+version = "3.12.1"
+
+[package.dependencies]
+six = ">=1.9.0"
+
+[package.extras]
+asyncio_client = ["aiohttp (>=3.4)"]
+client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
+
+[[package]]
+category = "main"
+description = "Socket.IO server"
+name = "python-socketio"
+optional = false
+python-versions = "*"
+version = "4.5.1"
+
+[package.dependencies]
+python-engineio = ">=3.9.0"
+six = ">=1.9.0"
+
+[package.extras]
+asyncio_client = ["aiohttp (>=3.4)", "websockets (>=7.0)"]
+client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
+
+[[package]]
 category = "dev"
 description = "Alternative regular expression module, to replace re."
 name = "regex"
@@ -464,7 +507,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "73e565ddb1e25ac23382d81f9afd0031392685e1988929f8129e173db3a6bc61"
+content-hash = "6052de5b1c2d7132bc910ae4bf7c9d12315c88e710249654c5d29ac20d314749"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -514,6 +557,10 @@ flask-cors = [
 flask-migrate = [
     {file = "Flask-Migrate-2.5.3.tar.gz", hash = "sha256:a69d508c2e09d289f6e55a417b3b8c7bfe70e640f53d2d9deb0d056a384f37ee"},
     {file = "Flask_Migrate-2.5.3-py2.py3-none-any.whl", hash = "sha256:4dc4a5cce8cbbb06b8dc963fd86cf8136bd7d875aabe2d840302ea739b243732"},
+]
+flask-socketio = [
+    {file = "Flask-SocketIO-4.2.1.tar.gz", hash = "sha256:2172dff1e42415ba480cee02c30c2fc833671ff326f1598ee3d69aa02cf768ec"},
+    {file = "Flask_SocketIO-4.2.1-py2.py3-none-any.whl", hash = "sha256:7ff5b2f5edde23e875a8b0abf868584e5706e11741557449bc5147df2cd78268"},
 ]
 flask-sqlalchemy = [
     {file = "Flask-SQLAlchemy-2.4.1.tar.gz", hash = "sha256:6974785d913666587949f7c2946f7001e4fa2cb2d19f4e69ead02e4b8f50b33d"},
@@ -661,6 +708,14 @@ python-editor = [
     {file = "python_editor-1.0.4-py2.7.egg", hash = "sha256:ea87e17f6ec459e780e4221f295411462e0d0810858e055fc514684350a2f522"},
     {file = "python_editor-1.0.4-py3-none-any.whl", hash = "sha256:1bf6e860a8ad52a14c3ee1252d5dc25b2030618ed80c022598f00176adc8367d"},
     {file = "python_editor-1.0.4-py3.5.egg", hash = "sha256:c3da2053dbab6b29c94e43c486ff67206eafbe7eb52dbec7390b5e2fb05aac77"},
+]
+python-engineio = [
+    {file = "python-engineio-3.12.1.tar.gz", hash = "sha256:2481732d93646998f7372ef0ecf003af7817b82720b881db173c3d50b4887916"},
+    {file = "python_engineio-3.12.1-py2.py3-none-any.whl", hash = "sha256:222926adb4bc6e03a8fc8e0ef2a3309f030c1c3f8e0fcc94c9ba214574565f02"},
+]
+python-socketio = [
+    {file = "python-socketio-4.5.1.tar.gz", hash = "sha256:149b98c33f8c3d09273fb4ebeb83781e4dc9411b56b27d9f058bec1bd1ed74b7"},
+    {file = "python_socketio-4.5.1-py2.py3-none-any.whl", hash = "sha256:81280cbbb7018d8ecdd006bf6025979733d347c0f2612282c1e21f6ed7d3b55b"},
 ]
 regex = [
     {file = "regex-2020.2.20-cp27-cp27m-win32.whl", hash = "sha256:99272d6b6a68c7ae4391908fc15f6b8c9a6c345a46b632d7fdb7ef6c883a2bbb"},
