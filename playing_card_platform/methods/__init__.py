@@ -97,7 +97,7 @@ def shuffle_deck(deck_id):
 
 def sort_deck(deck_id):
     deck = Deck.query.get(deck_id)
-    cards = Card.query.filter_by(deck=deck, dealt=False).order_by(id).all()
+    cards = Card.query.filter_by(deck=deck, dealt=False).order_by("id").all()
     for i, card in enumerate(cards):
         card.deck_position = i
     db.session.commit()
@@ -139,7 +139,7 @@ def flip_card(card_id):
     return card
 
 
-def clean_up(deck_id):
+def recall_deck(deck_id):
     deck = Deck.query.get(deck_id)
     cards = Card.query.filter_by(deck=deck).all()
     shuffle(cards)
