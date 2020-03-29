@@ -3,7 +3,6 @@ from playing_card_platform.routes import socketio
 from config import Config
 
 app = create_app(Config)
-socketio.init_app(app)
 
 
 @app.shell_context_processor

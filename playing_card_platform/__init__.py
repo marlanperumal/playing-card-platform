@@ -4,11 +4,13 @@ from flask import Flask
 from flask_cors import CORS
 
 from .models import db, migrate
+from .routes import socketio
 
 
 def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
+    socketio.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
     CORS(app)

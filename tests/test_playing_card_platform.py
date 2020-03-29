@@ -2,14 +2,14 @@ from collections import defaultdict
 
 from playing_card_platform import __version__, methods
 from playing_card_platform.models import CardSuit, CardValue, Card, Deck, AreaType, Area
-from . import BaseTest
+from . import BaseDBTest
 
 
 def test_version():
     assert __version__ == "0.1.0"
 
 
-class TestIntegration(BaseTest):
+class TestIntegration(BaseDBTest):
     def test_workflow(self):
         with self.subTest("Create Metadata"):
             methods.populate_metadata()

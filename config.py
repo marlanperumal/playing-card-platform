@@ -26,12 +26,13 @@ class Config:
 
     logging.info("Connecting to", SQLALCHEMY_DATABASE_URI)
 
-    SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 class TestConfig:
     SQLALCHEMY_DATABASE_URI = "sqlite://"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = os.getenv("SECRET_KEY")
     TESTING = True
     PROPAGATE_EXCEPTIONS = True

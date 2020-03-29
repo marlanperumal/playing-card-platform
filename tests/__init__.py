@@ -5,10 +5,11 @@ from config import TestConfig
 
 class BaseTest(TestCase):
     def create_app(self):
-        app = create_app()
-        app.config.from_object(TestConfig)
+        app = create_app(TestConfig)
         return app
 
+
+class BaseDBTest(BaseTest):
     def setUp(self):
         db.drop_all()
         db.create_all()
