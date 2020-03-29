@@ -21,7 +21,7 @@ VALUES = {
     "K": "King",
 }
 
-AREA_TYPES = {1: "DECK", 2: "HAND", 3: "PLAY_AREA", 4: "TRASH"}
+AREA_TYPES = {"DECK": "DECK", "HAND": "HAND", "PLAY": "PLAY", "TRASH": "TRASH"}
 
 
 def populate_metadata():
@@ -45,13 +45,22 @@ def populate_metadata():
         db.session.add(value)
         i += 1
 
-    for id, name in AREA_TYPES.items():
+    for id, description in AREA_TYPES.items():
         area_type = AreaType()
         area_type.id = id
-        area_type.name = name
+        area_type.description = description
         db.session.add(area_type)
 
     db.session.commit()
+
+
+def new_area(name, area_type_id):
+    area = Area()
+    area.name = name
+    area.area_type_id = area_type_id
+    db.session.add(area)
+    db.session.commit()
+    return area
 
 
 def new_deck():
@@ -59,30 +68,24 @@ def new_deck():
     deck.active = True
     deck.background = "blue"
     db.session.add(deck)
+    db.session.commit()
+    area = new_area(f"Deck Area {deck.id}", "DECK")
+    deck.area = area
     i = 0
     for suit in CardSuit.query.all():
         for value in CardValue.query.all():
             name = f"{value.name} of {suit.name}"
             card = Card()
             card.deck = deck
+            card.area = deck.area
             card.suit = suit
             card.value = value
             card.name = name
-            card.deck_position = i
+            card.position = i
             i += 1
             db.session.add(card)
     db.session.commit()
     return deck
-
-
-def new_area(name, area_type_name):
-    area = Area()
-    area.name = name
-    area_type = AreaType.query.filter_by(name=area_type_name).one()
-    area.area_type = area_type
-    db.session.add(area)
-    db.session.commit()
-    return area
 
 
 def shuffle_deck(deck_id):
@@ -90,7 +93,7 @@ def shuffle_deck(deck_id):
     cards = Card.query.filter_by(deck=deck, dealt=False).all()
     shuffle(cards)
     for i, card in enumerate(cards):
-        card.deck_position = i
+        card.position = i
     db.session.commit()
     return deck
 
@@ -99,35 +102,37 @@ def sort_deck(deck_id):
     deck = Deck.query.get(deck_id)
     cards = Card.query.filter_by(deck=deck, dealt=False).order_by("id").all()
     for i, card in enumerate(cards):
-        card.deck_position = i
+        card.position = i
     db.session.commit()
     return deck
 
 
-def deal_card(deck_id, area_id, face_up=False):
-    cards = Card.query.filter_by(deck_id=deck_id, dealt=False).order_by("deck_position").all()
+def order_area(area_id):
     area = Area.query.get(area_id)
-    card = cards[0]
-    card.dealt = True
-    card.area_position = len(area.cards)
-    card.area_id = area_id
+    cards = Card.query.filter_by(area=area).order_by("position").all()
+    for i, card in enumerate(cards):
+        card.position = i
+    db.session.commit()
+    return area
+
+
+def move_card(card_id, to_area_id, face_up=False):
+    card = Card.query.get(card_id)
+    from_area = card.area
+    to_area = Area.query.get(to_area_id)
     card.face_up = face_up
-    card.deck_position = None
-    for deck_card in cards[1:]:
-        deck_card.deck_position -= 1
+    card.position = len(to_area.cards)
+    card.area_id = to_area_id
+    db.session.commit()
+    order_area(from_area.id)
     db.session.commit()
     return card
 
 
-def move_card(card_id, from_area_id, to_area_id, face_up=False):
-    card = Card.query.get(card_id)
-    to_area = Area.query.get(to_area_id)
-    card.face_up = face_up
-    card.area_position = len(to_area.cards)
-    card.area_id = to_area_id
-    from_cards = Card.query.filter_by(area_id=from_area_id).order_by("area_position")
-    for i, from_card in enumerate(from_cards):
-        from_card.area_position = i
+def deal_card(deck_id, area_id, face_up=False):
+    card = Card.query.filter_by(deck_id=deck_id, dealt=False).order_by("position").first()
+    card = move_card(card.id, area_id, face_up)
+    card.dealt = True
     db.session.commit()
     return card
 
@@ -141,13 +146,15 @@ def flip_card(card_id):
 
 def recall_deck(deck_id):
     deck = Deck.query.get(deck_id)
-    cards = Card.query.filter_by(deck=deck).all()
-    shuffle(cards)
+    cards = Card.query.filter_by(deck=deck, dealt=True).all()
+    affected_area_ids = set()
     for i, card in enumerate(cards):
+        affected_area_ids.add(card.area_id)
         card.dealt = False
-        card.area = None
-        card.deck_position = i
-        card.area_position = None
+        card.area = deck.area
         card.face_up = False
+    for area_id in affected_area_ids:
+        order_area(area_id)
+    shuffle_deck(deck_id)
     db.session.commit()
     return deck

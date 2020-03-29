@@ -38,8 +38,7 @@ class Card(db.Model):
     name = db.Column(db.String(20))
     dealt = db.Column(db.Boolean, default=False)
     area_id = db.Column(db.Integer, db.ForeignKey("area.id", ondelete="SET NULL"))
-    deck_position = db.Column(db.Integer)
-    area_position = db.Column(db.Integer)
+    position = db.Column(db.Integer)
     face_up = db.Column(db.Boolean, default=False)
 
     deck = db.relationship("Deck", backref="cards")
@@ -53,19 +52,21 @@ class Deck(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     active = db.Column(db.Boolean)
     background = db.Column(db.String(20))
+    area_id = db.Column(db.Integer, db.ForeignKey("area.id", ondelete="CASCADE"))
+
+    area = db.relationship("Area", backref="deck", uselist=False)
 
 
 class AreaType(db.Model):
     __table_name__ = "area_type"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(20))
+    id = db.Column(db.String(20), primary_key=True)
     description = db.Column(db.String(255))
 
 
 class Area(db.Model):
     __table_name__ = "area"
     id = db.Column(db.Integer, primary_key=True)
-    area_type_id = db.Column(db.Integer, db.ForeignKey("area_type.id", ondelete="CASCADE"))
+    area_type_id = db.Column(db.String(20), db.ForeignKey("area_type.id", ondelete="CASCADE"))
     name = db.Column(db.String(50))
 
     area_type = db.relationship("AreaType", backref="areas")
