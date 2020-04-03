@@ -22,7 +22,7 @@ class Config:
             f"{DB_CONN_TYPE}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}"
         )
     else:
-        SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "app.db")
+        SQLALCHEMY_DATABASE_URI = "sqlite://"
 
     logging.info("Connecting to", SQLALCHEMY_DATABASE_URI)
 

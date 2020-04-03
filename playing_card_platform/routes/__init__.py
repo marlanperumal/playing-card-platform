@@ -12,4 +12,3 @@ def handle_message(message):
 @socketio.on("connect")
 def on_connect():
     emit("welcome", {"data": "test"})
-
