@@ -24,7 +24,7 @@ This is the backend to support a platform that allows users to set up any game u
     ```bash
     poetry install
     ```
-  - Create a copy of the `.env` file from the template
+- Create a copy of the `.env` file from the template. This will load necessary environment variables
   ```bash
   cp template.env .env
   ``` 
